@@ -82,19 +82,6 @@ summary.CoReg.result<-function(CoRegResult){
   cat(paste(numModule," module(s) were found"))
 }
 
-getSimMat.CoReg.result<-function(CoRegResult){
-  CoRegResult$similarity_matrix
-}
-
-getModule.CoReg.result<-function(CoRegResult){
-  CoRegResult$module
-}
-
-getRank.CoReg.result<-function(CoRegResult){
-  CoRegResult$rank
-}
-
-
 ##############################################
 # Calculate geometric index similarity matrix
 # g: graph, mode: incoming or outgoing,

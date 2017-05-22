@@ -90,11 +90,6 @@ plot.CoReg.auROC<-function(auROC){
     #return(lst.auc)
 }
 
-getAuc<-function(auROC){
-  if(!is(auROC,"CoReg.auROC")) stop("Argument auROC should be a CoReg.auROC object!")
-    auROC$AUC
-}
-
 # Get a ranked list for all the pairs
 get_rank_for_coreg<-function(g,sim="invlogweighted",mode="duplicates",nThreads){
   

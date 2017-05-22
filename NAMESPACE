@@ -1,2 +1,6 @@
 exportPattern("^[[:alpha:]]+")
 import(ggplot2,igraph,ROCR,parallel,dynamicTreeCut)
+importFrom("methods", "is")
+importFrom("stats", "as.dist", "hclust", "runif", "sd")
+importFrom("utils", "combn", "read.table")
+

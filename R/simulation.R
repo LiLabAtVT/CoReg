@@ -5,9 +5,6 @@
 #########################################################
 library(igraph)
 library(ggplot2)
-#source("test.R")
-#source("clustering.R")
-#source("load.R")
 
 ########################################################
 # This is the main function of this module
@@ -126,11 +123,6 @@ plot.CoReg.rewSim<-function(rewSim){
 
 print.CoReg.rewSim<-function(rewSim){
     print("CoReg.rewSim object")
-}
-
-getRewScore<-function(rewSim){
-    if(!is(rewSim,"CoReg.rewSim")) stop("Argument rewSim should be an CoReg.rewSim object!")
-    rewSim$evalResult
 }
 
 #########################################################

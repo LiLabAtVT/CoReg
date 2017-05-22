@@ -1,10 +1,10 @@
 Package: CoReg
 Type: Package
-Title: What the package does (short line)
+Title: Identification of co-regulators
 Version: 1.0
-Imports: ggplot2,igraph,ROCR,parallel,dynamicTreeCut
+Imports: ggplot2,igraph,ROCR,parallel,dynamicTreeCut,methods
 Date: 2017-02-04
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Qi Song
+Maintainer: Qi Song <alexsong@vt.edu>
+Description: CoReg is a R package which identifies the co-regulators from regulatory network
+License: GPL-3
