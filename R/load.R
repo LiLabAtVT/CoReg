@@ -2,25 +2,20 @@
 # Load the data file and convert the directed network
 # to a bipartite network.
 #########################################################
-library(igraph)
+# library(igraph)
 
-loadNetwork<-function(file,sep = "",header = F,mode = 'd',simple = T){
+loadNetwork<-function(file,sep = "",header = F,simple = T){
     el<-read.table(file=file,sep=sep,header=header,as.is=T,quote="")
-    if(mode == 'b'){
-        g<-graph.edgelist(as.matrix(el),directed = F)
-        g<-directedToBipartite(g)
-    }else if(mode == 'd'){
-        g<-graph.edgelist(as.matrix(el),directed = T)  
-    }else{
-        stop("Please specify correct mode!")
+    if(ncol(el)!=2){
+      stop("Input file should contain two columns. Please check the format")
     }
-    
+    g<-graph.edgelist(as.matrix(el),directed = T)
     # Remove self loop and multiple edges
     if(simple == T){
         g<-simplify(g)
         return(g)
     }else if(!is(simple,"logical")){
-        stop("Argument 'simple' should be logical!")
+        stop("Argument 'simple' should be 'True' or 'False'!")
     }
 }
 

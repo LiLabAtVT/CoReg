@@ -2,18 +2,12 @@
 \alias{CoReg}
 \alias{print.CoReg.result}
 \alias{summary.CoReg.result}
-\alias{getSimMat.CoReg.result}
-\alias{getModule.CoReg.result}
-\alias{getRank.CoReg.result}
 \title{Identify Co-regulators in transcription gene network}
 \description{This is the main function for identifying the co-regulators in transcription gene network}
 \usage{
 CoReg(g, sim = "jaccard", minDegree = 1, nThreads = 1)
 \method{print}{CoReg.result}()
 \method{summary}{CoReg.result}()
-\method{getSimMat}{CoReg.result}()
-\method{getModule}{CoReg.result}()
-\method{getRank}{CoReg.result}()
 }
 \arguments{
 \item{g}{ The input transcription network. This should be an "igraph" object returned by the function \code{"loadNetwork"}  }

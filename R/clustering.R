@@ -1,25 +1,36 @@
-library("dynamicTreeCut")
-library("igraph")
-library("parallel")
+# library("dynamicTreeCut")
+# library("igraph")
+# library("parallel")
 
 #########################################################
 # Main function for doing the network clustering
 #########################################################
 
 CoReg<-function(g,sim = "jaccard",minDegree = 1,nThreads=1){
+  
+  # Check input
   if(!is(g,"igraph")) stop("Argument g should be a graph object!")
-  if(!is(nThreads,"numeric") || nThreads<1) stop("Argument nThreads should be a integer value >=1")
+  if(!is(nThreads,"numeric") || nThreads %% 1 != 0 || nThreads<1){ 
+    stop("Argument nThreads should be a integer >=1")
+  }
+  if(!is(minDegree,"numeric") || minDegree %%1 != 0 || minDegree < 0){
+    stop("minDegree should be an integer value >= 0")
+  }
   
   # Get gene names
   g.degree<-degree(g)
+  names(g.degree)<-as_ids(V(g))
   gene.names<-names(g.degree[g.degree>=minDegree])
+  gene.idx<-which(g.degree>=minDegree)
 
   #gene.names<-V(g)$name
   
   # Choose between similarity measureament
   if(sim == "invlogweighted"){
     g.outsim.iw<-similarity.invlogweighted(g,gene.names,mode='out')
+    g.outsim.iw<-g.outsim.iw[,gene.idx]
     g.insim.iw<-similarity.invlogweighted(g,gene.names,mode='in')
+    g.insim.iw<-g.insim.iw[,gene.idx]
   }else if(sim == "jaccard"){
     g.outsim.iw<-similarity.jaccard(g,gene.names,mode='out')
     g.insim.iw<-similarity.jaccard(g,gene.names,mode='in')
@@ -56,10 +67,6 @@ CoReg<-function(g,sim = "jaccard",minDegree = 1,nThreads=1){
   
   # Generate output
   re.output<-list("module"=data.frame(ID=rownames(g.sim.iw),module=re.cut,stringsAsFactors = F),"similarity_matrix"=g.sim.iw,"rank"=rank.mat)
-  #if(output == T){
-  #    write.table(re.output$cluster,paste(outdir,"ClusterAssignments.csv",sep=""), row.names = F, sep = ',')
-  #    write.table(g.dsim.iw,paste(outdir,"SimilarityMatrix.csv",sep=""), row.names = F, sep = ',')
-  #}
   
   class(re.output)<-"CoReg.result"
   return(re.output)
@@ -76,10 +83,7 @@ print.CoReg.result<-function(CoRegResult){
 }
 
 summary.CoReg.result<-function(CoRegResult){
-  numGene<-nrow(CoRegResult$module)
-  numModule<-length(setdiff(unique(CoRegResult$module[,2]),0))
-  cat(paste(numGene," genes in total\n",sep=""))
-  cat(paste(numModule," module(s) were found"))
+  print(CoRegResult)
 }
 
 ##############################################

@@ -1,30 +1,41 @@
-#source("clustering.R")
-library(igraph)
-library(ROCR)
-library(ggplot2)
+# source("clustering.R")
+# library(igraph)
+# library(ROCR)
+# library(ggplot2)
 
 #####################################################
 # Compute ROC curve and AUC values
 #####################################################
 
-computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,nThreads=1){
+computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,steps=2,nThreads=1){
     
     # Check type of input argument
     if(!is(g,"igraph")){
         stop("Input graph should be a igraph graph object!")  
     }
-    if(!is(nDup,"numeric")){
-        stop("nDup should be an numeric value!")
+    if(!is(nDup,"numeric") || nDup %% 1 != 0 || nDup <= 0){
+        stop("nDup should be a positive integer!")
     }
-    if(!is(dDup,"numeric")){
-        stop("dDup should be an numeric value!")
+    if(!is(dDup,"numeric") || dDup %%1 != 0 || dDup <= 0){
+        stop("dDup should be a positive integer!")
     }
-    if(!is(rewProb,"numeric")){
-        stop("rewProb should be an numeric value!")
+    if(!is(rewProb,"numeric") || length(rewProb) > 1 || rewProb > 1 || rewProb < 0){
+        stop("rewProb should be an numeric value between 0 and 1!")
+    }
+    if(!is(steps,"numeric") || steps %% 1 != 0 || steps <= 0){
+        stop("steps should be a positive integer!")
+    }
+    allMethods = c("jaccard","geometric","wt","invlogweighted")  
+    for(method in simMethods){
+      if (!(method %in% allMethods)){
+        stop(paste("'",method,"'"," is not a valid simMethod name",sep=""))  
+      }
     }
 
     # Duplicate the graph  
-    g.dup<-networkDup(g,nDup,dDup)
+    re<-networkDup(g,nDup,dDup)
+    g.dup<-re$graph
+    actualDup<-re$nDup
   
     # Rewire the duplicates, get the score for the merged graph
     g.dup.rewired<-networkRew(g.dup,rate=rewProb)
@@ -33,16 +44,11 @@ computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,nThreads=1){
     # Compute a ranked list of similarity scores for each similarity measure
     lst.rank<-list()
     for(method in simMethods){
-        
-        if(method != "invlogweighted" && method != "jaccard" && method != "geometric" && method !="wt"){
-            stop("Invalid value for simMethods!")  
-        }
-      
         lst.rank[[length(lst.rank)+1]]<-switch(    method,
                                                    invlogweighted = get_rank_for_coreg(g.merge,sim="invlogweighted",mode="duplicates"),
                                                    jaccard = get_rank_for_coreg(g.merge,sim="jaccard",mode="duplicates"),
                                                    geometric = get_rank_for_coreg(g.merge,sim="geometric",mode="duplicates",nThreads=nThreads),
-                                                   wt = get_rank_for_wt(g.merge)
+                                                   wt = get_rank_for_wt(g.merge,mode="duplicates",steps=steps)
                                                )
     }
     
@@ -60,16 +66,19 @@ computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,nThreads=1){
     }
     names(AUC)<-simMethods
     colnames(curve)<-c("x","y","group")
-    re<-list(curve=curve,AUC=AUC)
+    re<-list(curve=curve,AUC=AUC,nDup=actualDup,dDup=dDup,methods=simMethods,rewProb=rewProb)
     class(re)<-"CoReg.auROC"
     return(re)
 }
 
-print.CoReg.auROC<-function(auROC){
-    cat("CoReg.auROC object\n")
-}
-
+##############################################
+# Plot ROC curve for CoReg.auROC object, which
+# is returned by computeAuROC
+##############################################
 plot.CoReg.auROC<-function(auROC){
+    all.colors = c("blue","red","green","black","grey")
+    color = all.colors[1:length(levels(auROC$curve[,"group"]))]
+    
     # Plot ROC curve
     fig<-ggplot()+geom_path(data=auROC$curve,aes(x=x,y=y,color=group))+
     geom_abline(intercept=0,slope=1)+
@@ -85,12 +94,30 @@ plot.CoReg.auROC<-function(auROC){
                    xlab("False positive rate")+
                    ylab("True positive rate")+
                    guides(color=guide_legend(title="methods"))+
-                   scale_color_manual(values=c("green","red","blue","black"))
+                   scale_color_manual(values=color)
     print(fig)
     #return(lst.auc)
 }
 
-# Get a ranked list for all the pairs
+#############################################
+# Generic functions: print() and summary()
+#############################################
+print.CoReg.auROC<-function(auROC){
+  cat("CoReg.auROC object\n")
+  cat("----------------Summary of ROC analysis----------------\n")
+  cat(auROC$nDup,"nodes with at least",auROC$dDup,"neighbors were duplicated.\n")
+  usedMethods<-do.call(paste,c(as.list(auROC$methods),sep=" "))
+  cat("Similarity calculation method used:",usedMethods)
+  cat(".\n")
+  rewProb = do.call(paste,c(as.list(auROC$rewProb),sep=" "))
+  cat("Rewiring probability tested:",rewProb)
+  cat(".\n")
+}
+summary.CoReg.auROC<-function(auROC){
+  print(auROC)
+}
+
+# Get a ranked list from CoReg result
 get_rank_for_coreg<-function(g,sim="invlogweighted",mode="duplicates",nThreads){
   
     if(mode!="duplicates" && mode!="all") stop("mode should be either 'duplicates' or 'all'")
@@ -137,7 +164,8 @@ get_rank_for_coreg<-function(g,sim="invlogweighted",mode="duplicates",nThreads){
     re
 }
 
-get_rank_for_wt<-function(g,mode="duplicates"){
+# Get a ranked list from similarity produced by WT algorithm
+get_rank_for_wt<-function(g,mode="duplicates",steps=2){
   
     if(mode!="duplicates" && mode!="all") stop("Invalid mode. mode should be 'duplicates' or 'all'")  
   
@@ -148,7 +176,7 @@ get_rank_for_wt<-function(g,mode="duplicates"){
 
     # Generate transition matrix and probability matrix
     mat.ts<-t(apply(mat.adj,1,function(x){d<-sum(x);x<-x/d;return(x)}))
-    mat.prob<<-mat.ts%*%mat.ts%*%mat.ts%*%mat.ts  # This matrix is accessible to other function
+    mat.prob<<-matrix_multi(mat.ts,steps) #%*%mat.ts%*%mat.ts  # This matrix is accessible to other function
 
     # Get distance based on the probability matrix
     if(mode=='duplicates'){
@@ -174,6 +202,16 @@ get_rank_for_wt<-function(g,mode="duplicates"){
     rank.mat
 }
 
+# Helper function for get_rank_for_wt
 get_distance_for_wt<-function(i,j){
     return(sqrt(sum((mat.prob[i,]-mat.prob[j,])^2/degree.dist)))
+}
+
+# Helper function for get_rank_for_wt. Compute matrices multiplication
+matrix_multi<-function(mat,steps){
+  res<-mat
+  for(i in 1:steps){
+    res<-res%*%mat
+  }
+  return(res)
 }
