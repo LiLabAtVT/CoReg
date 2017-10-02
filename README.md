@@ -71,7 +71,7 @@ plot(auROCres)
 ```
 ### 4. Perform evaluation of different module-finding methods on simulated network
 #### a. Compute Normalized Mutual Information (NMI) score
-`netSimAndEval` calls function `generateSimNet()` to generate simulated network(s) with pre-specified modular structure, and then runs different module-finding algorithms to identify modules. The correlation between pre-specified modules and algorithm identified modules is calculated using NMI score. The following example generates a simulated network with 5 pre-specified modules. Each module has 10 regulators and each regulator has 20 targets. There are 100 other nodes in the network which do not have outgoing edges (auxiliary nodes). The co-regulation probability for the simulated network is 0.5. After network is constructed, four clustering methods (as specified by `testMethods`) will be run to identify modules in the simulated network. 
+`netSimAndEval` calls function `generateSimNet()` to generate simulated network(s) with pre-specified modular structure, and then different module-finding algorithms are run to identify modules. The correlation between pre-specified modules and algorithm identified modules is calculated using NMI score. The following example generates a simulated network with 5 pre-specified modules. Each module has 10 regulators and each regulator has 20 targets. There are 100 other nodes in the network which do not have outgoing edges (auxiliary nodes). The co-regulation probability for the simulated network is 0.5. After network is constructed, four clustering methods (as specified by `testMethods`) will be run to identify modules in the simulated network. 
 ```R
 re<-netSimAndEval(10,5,20,100,0.5,testMethods=c("coregJac","lp","wt","eb"))
 ```
@@ -84,7 +84,7 @@ Plot the evaluation result
 plot(re)
 ```
 #### b. Generate a simulated network
-CoReg also provides the functionality of generating the simulated network for other use. The simulated network is returned as an edge list, represented by a two column matrix in R. In the example below, we use the same paramters as we have in last subsection to generate a simulated network
+CoReg also provides the functionality of generating the simulated network for other use. The simulated network is returned as an edge list, represented by a two column matrix in R. In the example below, we use the same paramters as we have in the previous example to generate a simulated network
 ```R
 re<-generateSimNet(10,5,20,100,0.5)
 
