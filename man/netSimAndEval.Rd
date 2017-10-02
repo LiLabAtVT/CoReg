@@ -41,6 +41,9 @@ Danon L, Díaz-Guilera A, Duch J, Arenas A: Comparing community structure identi
 \examples{
 re<-netSimAndEval(10,5,20,100,0.5,testMethods=c("coregJac","lp","wt","eb"))
 
-# View the edge list of simulated network
-re$el
+# See the summary
+summary(re)
+
+# Plot the evaluation result
+plot(re)
 }

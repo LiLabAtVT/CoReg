@@ -30,4 +30,7 @@ generateSimNet(mSize,mNum,targetNum,auxNum,prob)
 \author{Qi Song}
 \examples{
 re<-generateSimNet(10,5,20,100,0.5)
+
+# View the edge list of simulated network
+re$el
 }
