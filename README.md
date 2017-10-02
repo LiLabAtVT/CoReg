@@ -41,11 +41,11 @@ Show similarity matrix
 ```R
 athRes$similarity_matrix
 ```
-### 3. Perform simulation analysis
+### 3. Perform rewiring simulation analysis on Arabidopsis network
 #### a. Rewiring recall score
-`networkSim()` function performs rewiring simulation on Arabidopsis network and get rewiring recall score. CoReg will be compared to other three module-finding methods: label propagation, edge betweeness and walk trap. 50 nodes will be duplicated and rewiring probabilities will be 0.3 and 0.5. 
+`rewSim()` function performs rewiring simulation on Arabidopsis network and get rewiring recall score. CoReg will be compared to other three module-finding methods: label propagation, edge betweeness and walk trap. 50 nodes will be duplicated and rewiring probabilities will be 0.3 and 0.5. 
 ```R
-simRes<-networkSim(athNet,nDup = 50, dDup = 10, c(0.3,0.5),c("lp","wt","eb"),2)
+simRes<-rewSim(athNet,nDup = 50, dDup = 10, c(0.3,0.5),c("lp","wt","eb"),2)
 ```
 Show simulation result
 ```R
@@ -68,4 +68,29 @@ re$AUC
 Plot ROC curves
 ```R
 plot(auROCres)
+```
+### 4. Perform evaluation of different module-finding methods on simulated network
+#### a. Compute Normalized Mutual Information (NMI) score
+`netSimAndEval` calls function `generateSimNet()` to generate simulated network(s) with pre-specified modular structure, and then runs different module-finding algorithms to identify modules. The correlation between pre-specified modules and algorithm identified modules is calculated using NMI score. The following example generates a simulated network with 5 pre-specified modules. Each module has 10 regulators and each regulator has 20 targets. There are 100 other nodes in the network which do not have outgoing edges (auxiliary nodes). The co-regulation probability for the simulated network is 0.5. After network is constructed, four clustering methods (as specified by `testMethods`) will be run to identify modules in the simulated network. 
+```R
+re<-netSimAndEval(10,5,20,100,0.5,testMethods=c("coregJac","lp","wt","eb"))
+```
+See the summary of simulated network(s)
+```R
+summary(re)
+```
+Plot the evaluation result
+```R
+plot(re)
+```
+#### b. Generate a simulated network
+CoReg also provides the functionality of generating the simulated network for other use. The simulated network is returned as an edge list, represented by a two column matrix in R. In the example below, we use the same paramters as we have in last subsection to generate a simulated network
+```R
+re<-generateSimNet(10,5,20,100,0.5)
+
+# This is the edge list
+re$el
+
+# This is the ground-truth module partition
+re$modulePartition
 ```
