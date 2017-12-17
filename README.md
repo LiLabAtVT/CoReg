@@ -95,5 +95,5 @@ re$el
 re$modulePartition
 ```
 ## Citation
-Please cite the following paper if CoReg is used in a publication:
+Please cite the following paper if CoReg is used in a publication:\
 Song Q, Grene R, Heath LS, Li S: Identification of regulatory modules in genome scale transcription regulatory networks. BMC Syst Biol 2017, 11:140.
