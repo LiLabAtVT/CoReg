@@ -1,4 +1,6 @@
 # CoReg
+## Introduction
+CoReg is a computational tool for identifying co-regulatory genes in large-scale networks. We provide CoReg as an R package, which can be applied in any organisms with genome-scale regulatory network data.
 ## Installation
 ### 1. Install CoReg package through github
 To install CoReg through github, first you will need to install 'devtools' package for R:
@@ -95,6 +97,6 @@ re$el
 re$modulePartition
 ```
 ## Citation
-Please cite the following paper if CoReg is used in a publication:\
+Please cite the following paper if CoReg is used in your publication:\
 Song Q, Grene R, Heath LS, Li S: Identification of regulatory modules in genome scale transcription regulatory networks. BMC Syst Biol 2017, 11:140.\
 https://bmcsystbiol.biomedcentral.com/articles/10.1186/s12918-017-0493-2
