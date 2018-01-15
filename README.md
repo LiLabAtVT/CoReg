@@ -1,4 +1,5 @@
-# CoReg
+# CoReg 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 ## Introduction
 CoReg is a computational tool for identifying co-regulatory genes in large-scale networks. We provide CoReg as an R package, which can be applied in any organisms with genome-scale regulatory network data.
 ## Installation
