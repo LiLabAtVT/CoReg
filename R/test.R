@@ -1,4 +1,4 @@
-library("igraph")
+# library("igraph")
 
 ####################################################################################
 # First convert directed to bipartite and then run community detection algorithms on
