@@ -1,9 +1,9 @@
-\name{loadNetwork}
-\alias{loadNetwork}
-\title{Load transcription network}
+\name{networkFromFile}
+\alias{networkFromFile}
+\title{Load transcription network from file}
 \description{Function for loading a transcription network. Input should be an edge list}
 \usage{
-loadNetwork(file,sep = "",header = F,simple = T)
+networkFromFile(file,sep = "",header = F,simple = T)
 }
 \arguments{
 \item{file}{ the file name for the network edge list}
@@ -22,6 +22,4 @@ An "igraph" object storing the network
 }
 \author{Qi Song}
 \references{ Csardi G, Nepusz T: The igraph software package for complex network research, InterJournal, Complex Systems 1695. 2006. }
-\examples{
-}
 \keyword{load network}

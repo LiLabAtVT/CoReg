@@ -19,7 +19,7 @@ networkFromFile<-function(file,sep = "",header = F,simple = T){
     }
 }
 
-networkFromEdgeList(edgeList,simple = T){
+networkFromEdgeList<-function(edgeList,simple = T){
     if(ncol(edgeList)!=2 && !is.data.frame(edgeList)){
         stop("edgeList should be a data frame containing two columns. Please check the input")
     }

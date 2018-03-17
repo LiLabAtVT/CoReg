@@ -75,12 +75,12 @@ computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,steps=2,nThreads=1){
 # Plot ROC curve for CoReg.auROC object, which
 # is returned by computeAuROC
 ##############################################
-plot.CoReg.auROC<-function(CoReg.auROC){
+plot.CoReg.auROC<-function(auROC){
     all.colors = c("blue","red","green","black","grey")
-    color = all.colors[1:length(levels(CoReg.auROC$curve[,"group"]))]
+    color = all.colors[1:length(levels(auROC$curve[,"group"]))]
     
     # Plot ROC curve
-    fig<-ggplot()+geom_path(data=CoReg.auROC$curve,aes(x=x,y=y,color=group))+
+    fig<-ggplot()+geom_path(data=auROC$curve,aes(x=x,y=y,color=group))+
     geom_abline(intercept=0,slope=1)+
                    theme(
                              panel.background=element_blank(),
@@ -102,19 +102,19 @@ plot.CoReg.auROC<-function(CoReg.auROC){
 #############################################
 # Generic functions: print() and summary()
 #############################################
-print.CoReg.auROC<-function(CoReg.auROC){
+print.CoReg.auROC<-function(auROC){
   cat("CoReg.auROC object\n")
   cat("----------------Summary of ROC analysis----------------\n")
-  cat(CoReg.auROC$nDup,"nodes with at least",CoReg.auROC$dDup,"neighbors were duplicated.\n")
-  usedMethods<-do.call(paste,c(as.list(CoReg.auROC$methods),sep=" "))
+  cat(auROC$nDup,"nodes with at least",auROC$dDup,"neighbors were duplicated.\n")
+  usedMethods<-do.call(paste,c(as.list(auROC$methods),sep=" "))
   cat("Similarity calculation method used:",usedMethods)
   cat(".\n")
-  rewProb = do.call(paste,c(as.list(CoReg.auROC$rewProb),sep=" "))
+  rewProb = do.call(paste,c(as.list(auROC$rewProb),sep=" "))
   cat("Rewiring probability tested:",rewProb)
   cat(".\n")
 }
-summary.CoReg.auROC<-function(CoReg.auROC){
-  print(CoReg.auROC)
+summary.CoReg.auROC<-function(auROC){
+  print(auROC)
 }
 
 # Get a ranked list from CoReg result

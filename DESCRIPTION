@@ -1,9 +1,9 @@
 Package: CoReg
 Type: Package
 Title: Identification of co-regulators
-Version: 1.0
+Version: 1.0.1
 Imports: ggplot2,igraph,ROCR,parallel,dynamicTreeCut,methods
-Date: 2017-02-04
+Date: 2018-03-17
 Author: Qi Song
 Maintainer: Qi Song <alexsong@vt.edu>
 Description: CoReg is a R package which identifies the co-regulators from regulatory network

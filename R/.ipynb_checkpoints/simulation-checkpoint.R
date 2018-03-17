@@ -85,7 +85,7 @@ rewSim<-function(g,nDup,dDup,rewProb,methods=c(),nRep = 1,nThreads =1){
     
     re<-list(plotData=results.plot,evalResult=results.output,nDup=actualDup,dDup=dDup,methods=methods,nRep=nRep,rewProb=rewProb)
     
-    class(re)<-"CoReg.rewSim"
+    class(re)<-"CoReg.RewSim"
     return(re)
 }
 
@@ -95,8 +95,8 @@ rewSim<-function(g,nDup,dDup,rewProb,methods=c(),nRep = 1,nThreads =1){
 # method(s), evaluated by RRS score, which is computed during the rewiring
 # simulation on real networks.
 ############################################################################
-plot.CoReg.rewSim<-function(CoReg.rewSim){
-  figure<-ggplot(CoReg.rewSim$plotData,aes(x=rewProb,y=mean,colour=method)) +
+plot.CoReg.RewSim<-function(CoReg.RewSim){
+  figure<-ggplot(CoReg.RewSim$plotData,aes(x=rewProb,y=mean,colour=method)) +
     geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=0.01) +
     geom_line() +
     geom_point() +
@@ -107,21 +107,21 @@ plot.CoReg.rewSim<-function(CoReg.rewSim){
   print(figure)
 }
 
-print.CoReg.rewSim<-function(CoReg.rewSim){
-  cat("CoReg.rewSim object\n")
+print.CoReg.RewSim<-function(CoReg.RewSim){
+  cat("CoReg.RewSim object\n")
   cat("-------------Summary of rewiring simulation-------------\n")
-  cat(CoReg.rewSim$nDup,"nodes with at least",CoReg.rewSim$dDup,"neighbors were duplicated.\n")
-  cat("Each data point is calculated as average of",CoReg.rewSim$nRep,"run(s).\n")
-  usedMethods<-do.call(paste,c(as.list(CoReg.rewSim$methods),sep=" "))
+  cat(CoReg.RewSim$nDup,"nodes with at least",CoReg.RewSim$dDup,"neighbors were duplicated.\n")
+  cat("Each data point is calculated as average of",CoReg.RewSim$nRep,"run(s).\n")
+  usedMethods<-do.call(paste,c(as.list(CoReg.RewSim$methods),sep=" "))
   cat("Clustering methods used:",usedMethods)
   cat(".\n")
-  rewProb = do.call(paste,c(as.list(CoReg.rewSim$rewProb),sep=" "))
+  rewProb = do.call(paste,c(as.list(CoReg.RewSim$rewProb),sep=" "))
   cat("Rewiring probability tested:",rewProb)
   cat(".\n")
 }
 
-summary.CoReg.rewSim<-function(CoReg.rewSim){
-  print(CoReg.rewSim)
+summary.CoReg.RewSim<-function(CoReg.RewSim){
+  print(CoReg.RewSim)
 }
 
 #########################################################
