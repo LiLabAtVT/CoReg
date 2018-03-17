@@ -27,9 +27,13 @@ Load the arabidopsis example network(use `loadNetwork()` function if you want to
 ```R
 athNet<-data(athNet)
 ```
-Below is an example of using `loadNetwork()` to load other network. Note that network file should be formatted as two-column edge list. First column represents the ID of transcription factor and second column represents the ID of target gene.
+Below is an example of using `networkFromFile()` to load other network. Note that network file should be formatted as two-column edge list. First column represents the ID of transcription factors and second column represents the ID of target genes.
 ```R
-athNet<-loadNetwork("araNet.csv",",")
+athNet<-networkFromFile("araNet.csv",",")
+```
+Alternatively, you can convert a two-column data frame into igraph graph object using `networkFromEdgeList()`. The first column of the data frame should contain the ID of transcription factors and second column their corresponding target genes.
+```R
+networkFromEdgeList(edgelist)
 ```
 ### 2. Identify co-regulatory modules
 Identify co-regulatory modules in arabidopsis network:
