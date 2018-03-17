@@ -23,7 +23,7 @@ Load CoReg package in R:
 ```R
 library(CoReg)
 ```
-Load the arabidopsis example network(use `loadNetwork()` function if you want to load you own network for analysis):
+Load the arabidopsis example network(use `networkFromFile()` function if you want to load you own network for analysis):
 ```R
 athNet<-data(athNet)
 ```
