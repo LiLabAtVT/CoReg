@@ -6,7 +6,7 @@
 # Main function for doing the network clustering
 #########################################################
 
-CoReg<-function(g, gene.names = NULL, sim = "jaccard",minDegree = 1,nThreads=1){
+CoReg<-function(g, gene.names = NULL, sim = "jaccard",minDegree = 1, deepSplit=1, nThreads=1){
   
   # Check input
   if(!is(g,"igraph")) stop("Argument g should be a graph object!")
@@ -63,7 +63,7 @@ CoReg<-function(g, gene.names = NULL, sim = "jaccard",minDegree = 1,nThreads=1){
   re.hclust<-hclust(g.dist)
   
   # Cut the tree using dynamicTreeCut
-  re.cut<-cutreeDynamic(re.hclust,distM = as.matrix(g.dist),method = "hybrid",minClusterSize=2,verbose = 0)
+  re.cut<-cutreeDynamic(re.hclust,distM = as.matrix(g.dist),method = "hybrid",deepSplit = deepSplit, minClusterSize=2,verbose = 0)
   
   # Sort the gene pairs based on the similarity score
   gene.names.mat<-t(combn(gene.names,2))
