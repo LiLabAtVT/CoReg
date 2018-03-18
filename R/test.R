@@ -20,13 +20,13 @@ test<-function(g,test.method){
                cluster<-edge.betweenness.community(g.bi)
              },
              "coregJac"={
-               cluster<-CoReg(g,"jaccard",minDegree = 0)$module
+               cluster<-CoReg(g, sim = "jaccard",minDegree = 0)$module
              },
              "coregInv"={
-               cluster<-CoReg(g,"invlogweighted",minDegree = 0)$module
+               cluster<-CoReg(g, sim = "invlogweighted",minDegree = 0)$module
              },
              "coregGeo"={
-               cluster<-CoReg(g,"geometric",minDegree = 0)$module
+               cluster<-CoReg(g, sim = "geometric",minDegree = 0)$module
              }
            )
     

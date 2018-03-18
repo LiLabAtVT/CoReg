@@ -5,12 +5,13 @@
 \title{Identify Co-regulators in transcription gene network}
 \description{This is the main function for identifying the co-regulators in transcription gene network}
 \usage{
-CoReg(g, sim = "jaccard", minDegree = 1, nThreads = 1)
+CoReg(g, gene.names = NULL, sim = "jaccard", minDegree = 1, nThreads = 1)
 \method{print}{CoReg.result}(CoReg.result)
 \method{summary}{CoReg.result}(CoReg.result)
 }
 \arguments{
 \item{g}{ The input transcription network. This should be an "igraph" object returned by the function \code{"networkFromFile"} or \code{"networkFromEdgeList"}  }
+\item{gene.names}{ Gene IDs on which CoReg will be run. If not set, gene.names will be decided solely by \code{"minDegree"}}
 \item{sim}{ Similarity index for computing the similarity between genes. Available options are: "jaccard", "geometric", "invlogweighted". Default value is "jaccard". }
 \item{minDegree}{ The minimum degree for genes that need similarity calculation. Genes with degree smaller than minDegree will not be computated and therefore will not be considered as co-regulator to any other genes}
 \item{nThreads}{ Number of threads to be used for similarity computation. Only valid when \code{sim = "geometric"}. }
