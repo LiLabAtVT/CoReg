@@ -6,10 +6,13 @@
 # Main function for doing the network clustering
 #########################################################
 
-CoReg<-function(g,sim = "jaccard",minDegree = 1,nThreads=1){
+CoReg<-function(g, gene.names = Null, sim = "jaccard",minDegree = 1,nThreads=1){
   
   # Check input
   if(!is(g,"igraph")) stop("Argument g should be a graph object!")
+  if(gene.names != Null && !is(gene.names,"character")){
+    stop("gene.names should be Null or a character vector")
+  }
   if(!is(nThreads,"numeric") || nThreads %% 1 != 0 || nThreads<1){ 
     stop("Argument nThreads should be a integer >=1")
   }
@@ -20,7 +23,11 @@ CoReg<-function(g,sim = "jaccard",minDegree = 1,nThreads=1){
   # Get gene names
   g.degree<-degree(g)
   names(g.degree)<-as_ids(V(g))
-  gene.names<-names(g.degree[g.degree>=minDegree])
+  if(gene.names != Null){
+    gene.names<-intersect(gene.names, names(g.degree[g.degree>=minDegree]))
+  }else{
+    gene.names<-names(g.degree[g.degree>=minDegree])
+  }
   gene.idx<-which(g.degree>=minDegree)
 
   #gene.names<-V(g)$name
