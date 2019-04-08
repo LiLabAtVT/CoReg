@@ -25,7 +25,7 @@ library(CoReg)
 ```
 Load the arabidopsis example network(use `networkFromFile()` function if you want to load you own network for analysis):
 ```R
-athNet<-data(athNet)
+data(athNet)
 ```
 Below is an example of using `networkFromFile()` to load other network. Note that network file should be formatted as two-column edge list. First column represents the ID of transcription factors and second column represents the ID of target genes.
 ```R
