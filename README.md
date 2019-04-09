@@ -70,7 +70,7 @@ auROCres <- computeAuROC(athNet,nDup=50,dDup=10,rewProb=0.5,simMethods=c("jaccar
 ```
 Show AUC values
 ```R
-re$AUC
+auROCres$AUC
 ```
 Plot ROC curves
 ```R
