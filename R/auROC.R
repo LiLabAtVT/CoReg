@@ -77,7 +77,7 @@ computeAuROC<-function(g,nDup,dDup,rewProb,simMethods,steps=2,nThreads=1){
 ##############################################
 plot.CoReg.auROC<-function(CoReg.auROC){
     all.colors = c("blue","red","green","black","grey")
-    color = all.colors[1:length(levels(CoReg.auROC$curve[,"group"]))]
+    color = all.colors[1:length(unique(CoReg.auROC$curve[,"group"]))]
     
     # Plot ROC curve
     fig<-ggplot()+geom_path(data=CoReg.auROC$curve,aes(x=x,y=y,color=group))+
